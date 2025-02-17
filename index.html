@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fusion Tutorial</title>
+
+  <!-- Einbindung der Schriftart Montserrat -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Einbindung des Model-Viewer-Skripts -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+  <!-- Übersetzungs-Skript (in diesem Beispiel als externe Datei eingebunden) -->
+  <script src="translations.js"></script>
+
+  <style>
+    /* Grundlegendes Seitenlayout */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+    body {
+      background-color: #0D1B2A;
+      color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+      position: relative;
+    }
+    /* Logo und Flaggen */
+    .logo {
+      position: fixed;
+      top: 20px;
+      left: 10px;
+      width: 80px;
+      z-index: 1000;
+      text-align: center;
+    }
+    .logo img {
+      height: 100px;
+    }
+    .logo-label {
+      color: #FF9F1C;
+      font-size: 12px;
+      font-weight: bold;
+      margin-top: 4px;
+      margin-left: 8px;
+    }
+    .language-switch {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 999;
+    }
+    .language-switch img {
+      width: 30px;
+      cursor: pointer;
+      margin-left: 8px;
+    }
+    /* Header */
+    header {
+      text-align: center;
+      margin-top: 60px;
+      margin-bottom: 2rem;
+    }
+    header h1 {
+      font-size: 3rem;
+      font-weight: 600;
+      color: #E0E1DD;
+      margin-bottom: 1rem;
+    }
+    header p {
+      font-size: 1rem;
+      color: #A9BCD0;
+    }
+    /* Zweispaltiges Layout (oben) */
+    .content-section {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    .model-column,
+    .text-column {
+      flex: 1 1 300px;
+    }
+    .model-column model-viewer {
+      width: 100%;
+      height: 400px;
+      background-color: transparent;
+    }
+    .text-column {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+    }
+    /* Trennungsstrich und Überschrift */
+    .orange-divider {
+      border: none;
+      height: 2px;
+      background-color: #FF9F1C;
+      margin: 2rem 0;
+    }
+    .fusion-headline {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+    /* Playlist Section */
+    .playlist-section {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .playlist-section h2 {
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .playlist-section p {
+      font-size: 1rem;
+      color: #A9BCD0;
+      margin-bottom: 1rem;
+    }
+    .video-container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: center;
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+    /* Standardmäßig erhalten beide Spalten jeweils flex: 1 */
+    .video-container > .model-column,
+    .video-container > .video-column {
+      flex: 1;
+    }
+    .video-container iframe,
+    .video-container model-viewer {
+      width: 100%;
+      height: 280px;
+      margin-bottom: 0;
+    }
+    /* Link-Container und orange Links */
+    .link-container {
+      display: flex;
+      justify-content: center;
+      gap: 15rem;
+      margin-top: 0;
+      margin-bottom: 5rem;
+    }
+    .orange-link {
+      color: #FF9F1C;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .orange-link:hover {
+      text-decoration: underline;
+    }
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+    }
+    footer a {
+      color: #FF9F1C;
+      text-decoration: none;
+      font-weight: 600;
+      margin: 0 1rem;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+    /* Verschiebung des headerDescription-Textes (Desktop) */
+    p[data-i18n="headerDescription"] {
+      position: relative;
+      top: 100px;
+    }
+    /* Media Query für mobile Geräte */
+    @media (max-width: 768px) {
+      .container {
+        margin-top: 120px;
+      }
+      .content-section {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .content-section .model-column,
+      .content-section .text-column {
+        display: block;
+        width: 100%;
+      }
+      .model-column model-viewer {
+        display: block;
+        width: 100%;
+        min-height: 300px;
+        height: 300px;
+        object-fit: contain;
+      }
+      .video-container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .link-container {
+        gap: 2rem;
+      }
+      p[data-i18n="headerDescription"] {
+        top: 0;
+        margin-top: 1rem;
+      }
+    }
+    /* Cookie Consent Modal CSS */
+    .cookie-consent-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 5000;
+    }
+    .cookie-consent-content {
+      background: #fff;
+      color: #000;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 500px;
+      text-align: center;
+    }
+    .cookie-consent-content button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .video-placeholder {
+        width: 100%;
+        height: 280px;
+        background-color: #333;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        margin-bottom: 0;
+    }
+  </style>
+
+  <script>
+    // Beim Laden der Seite: Sprache anhand der Browsereinstellung ermitteln
+    document.addEventListener('DOMContentLoaded', () => {
+      let lang = 'en'; // Standard: Englisch
+      const userLang = navigator.language.toLowerCase();
+      if (userLang.startsWith('de')) {
+        lang = 'de';
+      } else if (userLang.startsWith('es')) {
+        lang = 'es';
+      } else if (userLang.startsWith('ja')) {
+        lang = 'ja';
+      }
+      setLanguage(lang);
+    });
+  </script>
+</head>
+<body>
+  <!-- Cookie Consent Modal -->
+  <div id="cookieConsentModal" class="cookie-consent-modal" style="display:none;">
+    <div class="cookie-consent-content">
+      <p>
+        This website uses cookies to display content such as YouTube videos.
+        Please agree to the use of cookies to continue.
+        For more information, please refer to our 
+        <a href="https://drive.google.com/file/d/1xZzMLR3aHG4q2Pl1TRlU-mmZPQuq1tTj/view?usp=share_link" target="_blank">Privacy Policy</a>
+        and the 
+        <a href="https://policies.google.com/privacy" target="_blank">YouTube Privacy Policy</a>.
+      </p>
+      <!-- NEU: Decline-Button (links) -->
+      <button id="declineCookies">Decline</button>
+      <!-- Accept-Button (rechts) -->
+      <button id="acceptCookies">Accept</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Flaggen -->
+    <div class="language-switch">
+      <img src="flag-de.png" alt="Deutsch" title="Deutsch" onclick="setLanguage('de')">
+      <img src="flag-en.png" alt="English" title="English" onclick="setLanguage('en')">
+      <img src="flag-es.png" alt="Español" title="Español" onclick="setLanguage('es')">
+      <img src="flag-ja.png" alt="日本語" title="日本語" onclick="setLanguage('ja')">
+    </div>
+
+    <!-- Header -->
+    <header>
+      <div class="logo">
+        <img src="logo.png" alt="Logo">
+        <p class="logo-label" data-i18n="logoLabel"></p>
+      </div>
+      <h1>Fusion Tutorial</h1>
+    </header>
+
+    <!-- Inhalt oben: 3D-Modell & headerDescription -->
+    <div class="content-section">
+      <div class="model-column">
+        <model-viewer
+          src="Druckluftmotor.glb"
+          ios-src="Druckluftmotor v1.usdz"
+          alt="3D-Modell in AR"
+          ar
+          ar-modes="scene-viewer quick-look webxr"
+          camera-controls
+          auto-rotate
+          exposure="0.5">
+        </model-viewer>
+      </div>
+      <div class="text-column">
+        <p data-i18n="headerDescription"></p>
+      </div>
+    </div>
+
+    <!-- Trennungsstrich und Headline -->
+    <hr class="orange-divider">
+    <h2 class="fusion-headline"></h2>
+
+    <!-- Playlist Sektionen – insgesamt 15 Bereiche -->
+
+    <!-- 1. Playlist-Bereich -->
+    <section class="playlist-section">
+      <h2 data-i18n="playlistTitle"></h2>
+      <p data-i18n="playlistDescription"></p>
+      <div class="video-container">
+        <div class="model-column">
+          <model-viewer
+            src="Grundplatte.glb"
+            ios-src="Grundplatte.usdz"
+            alt="3D-Modell: Grundplatte"
+            ar
+            ar-modes="scene-viewer quick-look webxr"
+            camera-controls
+            auto-rotate
+            exposure="0.5">
+          </model-viewer>
+        </div>
+        <div class="video-column">
+          <iframe id="youtubePlayer1" src="" data-src="" title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+      <div class="link-container">
+         <a href="https://drive.google.com/file/d/10MfmaJwXdXz165V7Wqp8GiSkO4aHzPrN/view" class="orange-link" data-i18n="linkTechnicalDrawing"></a>
+         <a href="3D_MODEL_URL_1" class="orange-link" data-i18n="link3DModel"></a>
+      </div>
+    </section>
+
+    <!-- 2. Playlist-Bereich -->
+    <section class="playlist-section">
+      <h2 data-i18n="secondPlaylistTitle"></h2>
+      <p data-i18n="secondPlaylistDescription"></p>
+      <div class="video-container">
+        <div class="model-column">
+          <model-viewer
+            src="Zylinderkopfplatte.glb"
+            ios-src="Zylinderkopfplatte v1.usdz"
+            alt="3D-Modell: Model 2"
+            ar
+            ar-modes="scene-viewer quick-look webxr"
+            camera-controls
+            auto-rotate
+            exposure="0.5">
+          </model-viewer>
+        </div>
+        <div class="video-column">
+          <iframe id="youtubePlayer2" src="" data-src="" title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+      <div class="link-container">
+         <a href="TECHNICAL_DRAWING_URL_2" class="orange-link" data-i18n="secondLinkTechnicalDrawing"></a>
+         <a href="3D_MODEL_URL_2" class="orange-link" data-i18n="secondLink3DModel"></a>
+      </div>
+    </section>
+
+    <!-- 3. Playlist-Bereich -->
+    <section class="playlist-section">
+      <h2 data-i18n="thirdPlaylistTitle"></h2>
+      <p data-i18n="thirdPlaylistDescription"></p>
+      <div class="video-container">
+        <div class="model-column">
+          <model-viewer
+            src="Stift.glb"
+            ios-src="Stift v1.usdz"
+            alt="3D-Modell: Model 3"
+            ar
+            ar-modes="scene-viewer quick-look webxr"
+            camera-controls
+            auto-rotate
+            exposure="0.5">
+          </model-viewer>
+        </div>
+        <div class="video-column">
+          <iframe id="youtubePlayer3" src="" data-src="" title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+      <div class="link-container">
+         <a href="https://drive.google.com/file/d/10MfmaJwXdXz165V7Wqp8GiSkO4aHzPrN/view" class="orange-link" data-i18n="thirdLinkTechnicalDrawing"></a>
+         <a href="3D_MODEL_URL_3" class="orange-link" data-i18n="thirdLink3DModel"></a>
+      </div>
+    </section>
+
+    <!-- 4. Playlist-Bereich -->
+    <section class="playlist-section">
+      <h2 data-i18n="fourthPlaylistTitle"></h2>
+      <p data-i18n="fourthPlaylistDescription"></p>
+      <div class="video-container">
+        <div class="model-column">
+          <model-viewer
+            src="Kurbelzapfen.glb"
+            ios-src="Kurbelzapfen v1.usdz"
+            alt="Kurbelzapfen"
+            ar
+            ar-modes="scene-viewer quick-look webxr"
+            camera-controls
+            auto-rotate
+            exposure="0.5">
+          </model-viewer>
+        </div>
+        <div class="video-column">
+          <iframe id="youtubePlayer4" src="" data-src="" title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+      <div class="link-container">
+         <a href="https://drive.google.com/file/d/10MfmaJwXdXz165V7Wqp8GiSkO4aHzPrN/view" class="orange-link" data-i18n="fourthLinkTechnicalDrawing"></a>
+         <a href="3D_MODEL_URL_4" class="orange-link" data-i18n="fourthLink3DModel"></a>
+      </div>
+    </section>
+
+    <!-- 5. Playlist-Bereich -->
+    <section class="playlist-section">
+      <h2 data-i18n="fifthPlaylistTitle"></h2>
+      <p data-i18n="fifthPlaylistDescription"></p>
+      <div class="video-container">
+        <div class="model-column">
+          <model-viewer
+            src="Pleuel.glb"
+            ios-src="Pleuel v1.usdz"
+            alt="Pleuel"
+            ar
+            ar-modes="scene-viewer quick-look webxr"
+            camera-controls
+            auto-rotate
+            exposure="0.5">
+          </model-viewer>
+        </div>
+        <div class="video-column">
+          <iframe id="youtubePlayer5" src="" data-src="" title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+      <div class="link-container">
+         <a href="https://drive.google.com/file/d/10MfmaJwXdXz165V7Wqp8GiSkO4aHzPrN/view" class="orange-link" data-i18n="fifthLinkTechnicalDrawing"></a>
+         <a href="3D_MODEL_URL_5" class="orange-link" data-i18n="fifthLink3DModel"></a>
+      </div>
+    </section>
+
+    <!-- 6. Playlist-Bereich -->
+    <section class="playlist-section">
+      <h2 data-i18n="sixthPlaylistTitle"></h2>
+      <p data-i18n="sixthPlaylistDescription"></p>
+      <div class="video-container">
+        <div class="model-column">
+          <model-viewer
+            src="Schwungscheibe.glb"
+            ios-src="Schwungscheibe v1.usdz"
+            alt="Schwungscheibe"
+            ar
+            ar-modes="scene-viewer quick-look webxr"
+            camera-controls
+            auto-rotate
+            exposure="0.5">
+          </model-viewer>
+        </div>
+        <div class="video-column">
+          <iframe id="youtubePlayer6" src="" data-src="" title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+      <div class="link-container">
+         <a href="https://drive.google.com/file/d/10MfmaJwXdXz165V7Wqp8GiSkO4aHzPrN/view" class="orange-link" data-i18n="sixthLinkTechnicalDrawing"></a>
+         <a href="3D_MODEL_URL_6" class="orange-link" data-i18n="sixthLink3DModel"></a>
+      </div>
+    </section>
+
+    <!-- 7. Playlist-Bereich -->
+    <section class="playlist-section">
+      <h2 data-i18n="seventhPlaylistTitle"></h2>
+      <p data-i18n="seventhPlaylistDescription"></p>
+      <div class="video-container">
+        <div class="model-column">
+          <model-viewer
+            src="Kolben.glb"
+            ios-src="Kolben v1.usdz"
+            alt="Kolben"
+            ar
+            ar-modes="scene-viewer quick-look webxr"
+            camera-controls
+            auto-rotate
+            exposure="0.5">
+          </model-viewer>
+        </div>
+        <div class="video-column">
+          <iframe id="youtubePlayer7" src="" data-src="" title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+      <div class="link-container">
+         <a href="https://drive.google.com/file/d/10MfmaJwXdXz165V7Wqp8GiSkO4aHzPrN/view" class="orange-link" data-i18n="seventhLinkTechnicalDrawing"></a>
+         <a href="3D_MODEL_URL_7" class="orange-link" data-i18n="seventhLink3DModel"></a>
+      </div>
+    </section>
+
+    <!-- 8. Playlist-Bereich -->
+    <section class="playlist-section">
+      <h2 data-i18n="eighthPlaylistTitle"></h2>
+      <p data-i18n="eighthPlaylistDescription"></p>
+      <div class="video-container">
+        <div class="model-column">
+          <model-viewer
+            src="Kurbel.glb"
+            ios-src="Kurbel v1.usdz"
+            alt="Kurbel"
+            ar
+            ar-modes="scene-viewer quick-look webxr"
+            camera-controls
+            auto-rotate
+            exposure="0.5">
+          </model-viewer>
+        </div>
+        <div class="video-column">
+          <iframe id="youtubePlayer8" src="" data-src="" title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+      <div class="link-container">
+         <a href="https://drive.google.com/file/d/10MfmaJwXdXz165V7Wqp8GiSkO4aHzPrN/view" class="orange-link" data-i18n="eighthLinkTechnicalDrawing"></a>
+         <a href="3D_MODEL_URL_8" class="orange-link" data-i18n="eighthLink3DModel"></a>
+      </div>
+    </section>
+
+    <!-- 9. Playlist-Bereich -->
+    <section class="playlist-section">
+      <h2 data-i18n="ninthPlaylistTitle"></h2>
+      <p data-i18n="ninthPlaylistDescription"></p>
+      <div class="video-container">
+        <div class="model-column">
+          <model-viewer
+            src="Motorblock.glb"
+            ios-src="Motorblock.usdz"
+            alt="Motorblock"
+            ar
+            ar-modes="scene-viewer quick-look webxr"
+            camera-controls
+            auto-rotate
+            exposure="0.5">
+          </model-viewer>
+        </div>
+        <div class="video-column">
+          <iframe id="youtubePlayer9" src="" data-src="" title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+      <div class="link-container">
+         <a href="https://drive.google.com/file/d/10MfmaJwXdXz165V7Wqp8GiSkO4aHzPrN/view" class="orange-link" data-i18n="ninthLinkTechnicalDrawing"></a>
+         <a href="3D_MODEL_URL_9" class="orange-link" data-i18n="ninthLink3DModel"></a>
+      </div>
+    </section>
+
+    <!-- 10. Playlist-Bereich -->
+    <section class="playlist-section">
+      <h2 data-i18n="tenthPlaylistTitle"></h2>
+      <p data-i18n="tenthPlaylistDescription"></p>
+      <div class="video-container">
+        <div class="model-column">
+          <model-viewer
+            src="Kurbelwelle.glb"
+            ios-src="Kurbelwelle v1.usdz"
+            alt="Kurbelwelle"
+            ar
+            ar-modes="scene-viewer quick-look webxr"
+            camera-controls
+            auto-rotate
+            exposure="0.5">
+          </model-viewer>
+        </div>
+        <div class="video-column">
+          <iframe id="youtubePlayer10" src="" data-src="" title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+      <div class="link-container">
+         <a href="https://drive.google.com/file/d/10MfmaJwXdXz165V7Wqp8GiSkO4aHzPrN/view" class="orange-link" data-i18n="tenthLinkTechnicalDrawing"></a>
+         <a href="3D_MODEL_URL_10" class="orange-link" data-i18n="tenthLink3DModel"></a>
+      </div>
+    </section>
+
+    <!-- 11. Playlist-Bereich -->
+    <section class="playlist-section">
+      <h2 data-i18n="eleventhPlaylistTitle"></h2>
+      <p data-i18n="eleventhPlaylistDescription"></p>
+      <div class="video-container">
+        <div class="model-column">
+          <model-viewer
+            src="Befestigungsbuegel.glb"
+            ios-src="Befestigungsbuegel v1.usdz"
+            alt="Befestigungsbuegel"
+            ar
+            ar-modes="scene-viewer quick-look webxr"
+            camera-controls
+            auto-rotate
+            exposure="0.5">
+          </model-viewer>
+        </div>
+        <div class="video-column">
+          <iframe id="youtubePlayer11" src="" data-src="" title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+      <div class="link-container">
+         <a href="https://drive.google.com/file/d/10MfmaJwXdXz165V7Wqp8GiSkO4aHzPrN/view" class="orange-link" data-i18n="eleventhLinkTechnicalDrawing"></a>
+         <a href="3D_MODEL_URL_11" class="orange-link" data-i18n="eleventhLink3DModel"></a>
+      </div>
+    </section>
+
+    <!-- 12. Playlist-Bereich -->
+    <section class="playlist-section">
+      <h2 data-i18n="twelfthPlaylistTitle"></h2>
+      <p data-i18n="twelfthPlaylistDescription"></p>
+      <div class="video-container">
+        <div class="model-column">
+          <model-viewer
+            src="Schrauben.glb"
+            ios-src="Schrauben.usdz"
+            alt="Schrauben"
+            ar
+            ar-modes="scene-viewer quick-look webxr"
+            camera-controls
+            auto-rotate
+            exposure="0.5">
+          </model-viewer>
+        </div>
+        <div class="video-column">
+          <iframe id="youtubePlayer12" src="" data-src="" title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+      <div class="link-container">
+         <a href="https://drive.google.com/file/d/10MfmaJwXdXz165V7Wqp8GiSkO4aHzPrN/view" class="orange-link" data-i18n="twelfthLinkTechnicalDrawing"></a>
+         <a href="3D_MODEL_URL_12" class="orange-link" data-i18n="twelfthLink3DModel"></a>
+      </div>
+    </section>
+
+    <!-- 13. Playlist-Bereich – Kein 3D-Modell, Video in voller Breite -->
+    <section class="playlist-section">
+      <h2 data-i18n="thirteenthPlaylistTitle"></h2>
+      <p data-i18n="thirteenthPlaylistDescription"></p>
+      <div class="video-container">
+        <div class="video-column">
+          <iframe id="youtubePlayer13" src="" data-src="" title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+      <div class="link-container">
+         <a href="https://drive.google.com/file/d/10MfmaJwXdXz165V7Wqp8GiSkO4aHzPrN/view" class="orange-link" data-i18n="thirteenthLinkTechnicalDrawing"></a>
+         <a href="3D_MODEL_URL_13" class="orange-link" data-i18n="thirteenthLink3DModel"></a>
+      </div>
+    </section>
+
+    <!-- 14. Playlist-Bereich – Kein 3D-Modell, Video in voller Breite -->
+    <section class="playlist-section">
+      <h2 data-i18n="fourteenthPlaylistTitle"></h2>
+      <p data-i18n="fourteenthPlaylistDescription"></p>
+      <div class="video-container">
+        <div class="video-column">
+          <iframe id="youtubePlayer14" src="" data-src="" title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+      <div class="link-container">
+         <a href="https://drive.google.com/file/d/10MfmaJwXdXz165V7Wqp8GiSkO4aHzPrN/view" class="orange-link" data-i18n="fourteenthLinkTechnicalDrawing"></a>
+         <a href="3D_MODEL_URL_14" class="orange-link" data-i18n="fourteenthLink3DModel"></a>
+      </div>
+    </section>
+
+    <!-- 15. Playlist-Bereich – Kein 3D-Modell, Video in voller Breite -->
+    <section class="playlist-section">
+      <h2 data-i18n="fifteenthPlaylistTitle"></h2>
+      <p data-i18n="fifteenthPlaylistDescription"></p>
+      <div class="video-container">
+        <div class="video-column">
+          <iframe id="youtubePlayer15" src="" data-src="" title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+      <div class="link-container">
+         <a href="https://drive.google.com/file/d/10MfmaJwXdXz165V7Wqp8GiSkO4aHzPrN/view" class="orange-link" data-i18n="fifteenthLinkTechnicalDrawing"></a>
+         <a href="3D_MODEL_URL_15" class="orange-link" data-i18n="fifteenthLink3DModel"></a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p data-i18n="footerResources"></p>
+        <a href="https://www.autodesk.de/products/fusion-360/overview"
+           target="_blank"
+           data-i18n="footerLinkFusion"></a>
+        <a href="https://www.youtube.com/@mintfactory"
+           target="_blank"
+           data-i18n="footerLinkChannel"></a>
+        <a href="mailto:team@mintfactory.eu">team@mintfactory.eu</a>
+      
+        <!-- NEU: Button als Link zur Datenschutzerklärung -->
+        <a href="https://drive.google.com/file/d/1xZzMLR3aHG4q2Pl1TRlU-mmZPQuq1tTj/view?usp=share_link"
+           class="orange-policy-button"
+           target="_blank">
+          Privacy Policy
+        </a>
+      </footer>
+  </div>
+
+  <!-- Script: Cookie Consent und dynamisches Laden der YouTube-IFRAMEs -->
+  <script>
+    // Bereits vorhanden:
+    function loadYouTubeIframes() {
+      const playerCount = 15; // Anzahl der YouTube-Player
+      for (let i = 1; i <= playerCount; i++) {
+        const player = document.getElementById('youtubePlayer' + i);
+        if (player && player.dataset.src) {
+          player.src = player.dataset.src;
+        }
+      }
+    }
+  
+    // NEU: Funktion zum Erstellen der Platzhalter
+    function showPlaceholders() {
+      const playerCount = 15;
+      for (let i = 1; i <= playerCount; i++) {
+        const frame = document.getElementById('youtubePlayer' + i);
+        if (frame) {
+          // iFrame unsichtbar machen
+          frame.style.display = 'none';
+  
+          // Platzhalter-Element erstellen
+          const placeholder = document.createElement('div');
+          placeholder.classList.add('video-placeholder');
+          placeholder.style.cssText = `
+            width: 100%;
+            height: 280px;
+            background-color: #333;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin-bottom: 0;
+          `;
+  
+          // Inhalt des Platzhalters
+          placeholder.innerHTML = `
+            <p style="text-align: center;">
+              You have declined cookies.<br>
+              This YouTube video is disabled.
+            </p>
+            <button style="margin-top:10px;" onclick="acceptCookiesAndLoad()">
+              Accept Cookies & Load Video
+            </button>
+          `;
+  
+          // Platzhalter DOM-mäßig vor oder nach dem Iframe einfügen
+          // Hier: vor dem eigentlichen iFrame, damit die Reihenfolge stimmt
+          frame.parentNode.insertBefore(placeholder, frame);
+        }
+      }
+    }
+  
+    // NEU: Wenn Nutzer nachträglich zustimmt
+    function acceptCookiesAndLoad() {
+      localStorage.setItem("cookiesAccepted", "true");
+      document.body.style.overflow = "";
+  
+      // Alle Platzhalter entfernen
+      const placeholders = document.querySelectorAll('.video-placeholder');
+      placeholders.forEach(ph => ph.remove());
+  
+      // iFrames wieder sichtbar machen
+      const playerCount = 15;
+      for (let i = 1; i <= playerCount; i++) {
+        const frame = document.getElementById('youtubePlayer' + i);
+        if (frame) {
+          frame.style.display = '';
+        }
+      }
+  
+      // Jetzt die YouTube-Iframes laden
+      loadYouTubeIframes();
+    }
+  
+    // Event Listener für DOMContentLoaded (angepasst)
+    document.addEventListener("DOMContentLoaded", function() {
+      const cookiesAccepted = localStorage.getItem("cookiesAccepted");
+      
+      if (cookiesAccepted === "true") {
+        // User hat bereits zugestimmt
+        loadYouTubeIframes();
+      } else if (cookiesAccepted === "false") {
+        // User hat bereits abgelehnt -> IFrames NICHT laden, stattdessen Platzhalter
+        showPlaceholders();
+      } else {
+        // Noch keine Entscheidung -> Modal anzeigen
+        document.getElementById("cookieConsentModal").style.display = "flex";
+        document.body.style.overflow = "hidden";
+      }
+  
+      // Klick auf "Accept"
+      document.getElementById("acceptCookies").addEventListener("click", function(){
+        localStorage.setItem("cookiesAccepted", "true");
+        document.getElementById("cookieConsentModal").style.display = "none";
+        document.body.style.overflow = "";
+        loadYouTubeIframes();
+      });
+  
+      // Klick auf "Decline"
+      document.getElementById("declineCookies").addEventListener("click", function(){
+        localStorage.setItem("cookiesAccepted", "false");
+        document.getElementById("cookieConsentModal").style.display = "none";
+        document.body.style.overflow = "";
+        showPlaceholders();
+      });
+    });
+  </script>
+</body>
+</html>
