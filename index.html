@@ -250,15 +250,15 @@
     }
 
     .video-placeholder {
-        width: 100%;
-        height: 280px;
-        background-color: #333;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        margin-bottom: 0;
+      width: 100%;
+      height: 280px;
+      background-color: #333;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      margin-bottom: 0;
     }
   </style>
 
@@ -756,27 +756,33 @@
 
     <!-- Footer -->
     <footer>
-        <p data-i18n="footerResources"></p>
-        <a href="https://www.autodesk.de/products/fusion-360/overview"
-           target="_blank"
-           data-i18n="footerLinkFusion"></a>
-        <a href="https://www.youtube.com/@mintfactory"
-           target="_blank"
-           data-i18n="footerLinkChannel"></a>
-        <a href="mailto:team@mintfactory.eu">team@mintfactory.eu</a>
-      
-        <!-- NEU: Button als Link zur Datenschutzerklärung -->
-        <a href="https://drive.google.com/file/d/1xZzMLR3aHG4q2Pl1TRlU-mmZPQuq1tTj/view?usp=share_link"
-           class="orange-policy-button"
-           target="_blank">
-          Privacy Policy
-        </a>
-      </footer>
+      <p data-i18n="footerResources"></p>
+      <a href="https://www.autodesk.de/products/fusion-360/overview"
+         target="_blank"
+         data-i18n="footerLinkFusion"></a>
+      <a href="https://www.youtube.com/@mintfactory"
+         target="_blank"
+         data-i18n="footerLinkChannel"></a>
+      <a href="mailto:team@mintfactory.eu">team@mintfactory.eu</a>
+
+      <!-- NEU: Button als Link zur Datenschutzerklärung -->
+      <a href="https://drive.google.com/file/d/1xZzMLR3aHG4q2Pl1TRlU-mmZPQuq1tTj/view?usp=share_link"
+         class="orange-policy-button"
+         target="_blank">
+        Privacy Policy
+      </a>
+    </footer>
+
+    <!-- Kleines Impressum -->
+    <div style="font-size: 0.8rem; color: #AAAAAA; text-align: center; margin-top: 1rem;">
+      Impressum: (Schulprojekt) Förderverein Brinkstraße 17 • 49080 Osnabrück • 
+      <a href="mailto:team@mintfactory.eu" style="color: #AAAAAA;">team@mintfactory.eu</a>
+    </div>
+
   </div>
 
   <!-- Script: Cookie Consent und dynamisches Laden der YouTube-IFRAMEs -->
   <script>
-    // Bereits vorhanden:
     function loadYouTubeIframes() {
       const playerCount = 15; // Anzahl der YouTube-Player
       for (let i = 1; i <= playerCount; i++) {
@@ -822,14 +828,13 @@
             </button>
           `;
   
-          // Platzhalter DOM-mäßig vor oder nach dem Iframe einfügen
-          // Hier: vor dem eigentlichen iFrame, damit die Reihenfolge stimmt
+          // Platzhalter DOM-mäßig vor dem iFrame einfügen
           frame.parentNode.insertBefore(placeholder, frame);
         }
       }
     }
   
-    // NEU: Wenn Nutzer nachträglich zustimmt
+    // Wenn Nutzer nachträglich zustimmt
     function acceptCookiesAndLoad() {
       localStorage.setItem("cookiesAccepted", "true");
       document.body.style.overflow = "";
@@ -851,7 +856,6 @@
       loadYouTubeIframes();
     }
   
-    // Event Listener für DOMContentLoaded (angepasst)
     document.addEventListener("DOMContentLoaded", function() {
       const cookiesAccepted = localStorage.getItem("cookiesAccepted");
       
