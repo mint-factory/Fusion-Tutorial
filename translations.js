@@ -107,7 +107,7 @@ const translations = {
       // 15. Playlist-Sektion – Kein 3D-Modell, Video in voller Breite
       fifteenthPlaylistTitle: "#15: Technische Zeichnungen erstellen – Manuell & Automatisch!",
       fifteenthPlaylistDescription: "In diesem Video zeigen wir dir, wie du technische Zeichnungen in Fusion manuell erstellst und automatisch generierst. Du lernst, Einzelteil- und Baugruppenzeichnungen professionell zu dokumentieren, Bemaßungen hinzuzufügen und ISO-konforme Zeichnungen zu exportieren.",
-      fifteenthYoutubeLink: "https://www.youtube.com/embed/YOUR_FIFTEENTH_VIDEO",
+      fifteenthYoutubeLink: "https://www.youtube.com/embed/zB3W66HpZN8?si=FR3vNU5EEiAygo7j",
       fifteenthLinkTechnicalDrawing: "Technische Zeichnung",
       fifteenthLink3DModel: "3D Modell-Datei",
       
@@ -207,7 +207,7 @@ const translations = {
     
         fifteenthPlaylistTitle: "#15: Create Technical Drawings – Manually & Automatically!",
         fifteenthPlaylistDescription: "In this video, we show you how to create technical drawings in Fusion both manually and automatically. You will learn how to document part and assembly drawings professionally, add dimensions, and export ISO-compliant drawings.",
-        fifteenthYoutubeLink: "https://www.youtube.com/embed/YOUR_FIFTEENTH_VIDEO",
+        fifteenthYoutubeLink: "https://www.youtube.com/embed/A6YCLF2EhPI?si=7q1cF-N9ka5WODJ9",
         fifteenthLinkTechnicalDrawing: "Technical Drawing",
         fifteenthLink3DModel: "3D Model File",
     
